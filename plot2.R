@@ -12,16 +12,14 @@ powerConsumption<- read.table("household_power_consumption.txt", sep = ";",
 mysubset<- powerConsumption[c(powerConsumption$Date %in% c("1/2/2007", "2/2/2007")),]
 
 # convert the Date and Time variables to Date/Time classes
-mysubset$Date<- as.Date(mysubset$Date,"%d/%m/%Y")
-mysubset$Time<- paste(mysubset$Date, mysubset$Time)
-mysubset$Time<- strptime(mysubset$Time, format ="%Y-%m-%d %H:%M:%S" )
+mysubset$datetime <- strptime(paste(mysubset$Date, mysubset$Time, sep=" "), "%d/%m/%Y %H:%M:%S")
 
 
 ### Plot 2
 ## open PNG device
 png(filename = "plot2.png", height = 480, width = 480, units = "px")
 ## create a plot with annotations
-with(mysubset, plot(as.POSIXct(round(Time, "mins")) ,Global_active_power,
+with(mysubset, plot(datetime ,Global_active_power,
                     type = "l",ylab = "Global Active Power (kilowatts)",
                     xlab = ""))
 

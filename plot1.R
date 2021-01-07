@@ -12,9 +12,7 @@ powerConsumption<- read.table("household_power_consumption.txt", sep = ";",
 mysubset<- powerConsumption[c(powerConsumption$Date %in% c("1/2/2007", "2/2/2007")),]
 
 # convert the Date and Time variables to Date/Time classes
-mysubset$Date<- as.Date(mysubset$Date,"%d/%m/%Y")
-mysubset$Time<- paste(mysubset$Date, mysubset$Time)
-mysubset$Time<- strptime(mysubset$Time, format ="%Y-%m-%d %H:%M:%S" )
+mysubset$datetime <- strptime(paste(mysubset$Date, mysubset$Time, sep=" "), "%d/%m/%Y %H:%M:%S")
 
 ### Plot 1
 ## open PNG device

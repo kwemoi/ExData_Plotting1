@@ -12,9 +12,8 @@ powerConsumption<- read.table("household_power_consumption.txt", sep = ";",
 mysubset<- powerConsumption[c(powerConsumption$Date %in% c("1/2/2007", "2/2/2007")),]
 
 # convert the Date and Time variables to Date/Time classes
-mysubset$Date<- as.Date(mysubset$Date,"%d/%m/%Y")
-mysubset$Time<- paste(mysubset$Date, mysubset$Time)
-mysubset$Time<- strptime(mysubset$Time, format ="%Y-%m-%d %H:%M:%S" )
+mysubset$datetime <- strptime(paste(mysubset$Date, mysubset$Time, sep=" "),
+                              "%d/%m/%Y %H:%M:%S")
 
 ## Plot 4
 
@@ -25,27 +24,25 @@ png(filename = "plot4.png", height = 480, width = 480, units = "px")
 
 par(mfrow = c(2,2))
 
-with(mysubset, plot(as.POSIXct(round(Time, "mins")) ,Global_active_power,
+with(mysubset, plot(datetime ,Global_active_power,
                     type = "l",ylab = "Global Active Power",
                     xlab = ""))
 
-with(mysubset, plot(as.POSIXct(round(Time, "mins")) ,Voltage,
+with(mysubset, plot(datetime ,Voltage,
                     type = "l",ylab = "Voltage",
                     xlab = "datetime"))
 
-with(mysubset, plot(as.POSIXct(round(Time, "mins")), Sub_metering_1, type = "n",
+with(mysubset, plot(datetime, Sub_metering_1, type = "l",
                     xlab = "", ylab = "Energy sub metering"))
-points(as.POSIXct(round(mysubset$Time, "mins")), mysubset$Sub_metering_1, 
-       col = "black", type = "l")
-points(as.POSIXct(round(mysubset$Time, "mins")), mysubset$Sub_metering_2, 
+points(mysubset$datetime, mysubset$Sub_metering_2, 
        col = "red", type = "l")
-points(as.POSIXct(round(mysubset$Time, "mins")), mysubset$Sub_metering_3, 
+points(mysubset$datetime, mysubset$Sub_metering_3, 
        col = "blue", type = "l")
 legend("topright", lty = 1, lwd = 2, col = c("black", "red","blue"),
        legend = c("Sub_metering_1","Sub_metering_2","Sub_metering_3"))
 
 
-with(mysubset, plot(as.POSIXct(round(Time, "mins")) ,Global_reactive_power,
+with(mysubset, plot(datetime ,Global_reactive_power,
                     type = "l",ylab = "Global_reactive_power",
                     xlab = "datetime"))
 
